@@ -19,9 +19,13 @@ BUILD_DIR := $(LOCAL_DIR)/build
 
 # List the source files here.
 DIVIDE_TEST_SRCS=divide_test.c divide.c
-
 DIVIDE_TEST_OBJS=$(DIVIDE_TEST_SRCS:%.c=$(BUILD_DIR)/%.o)
 DIVIDE_TEST := $(BUILD_DIR)/divide_test
+
+# List the source files here.
+DIVIDE2_TEST_SRCS=divide_test.c divide2.c
+DIVIDE2_TEST_OBJS=$(DIVIDE2_TEST_SRCS:%.c=$(BUILD_DIR)/%.o)
+DIVIDE2_TEST := $(BUILD_DIR)/divide2_test
 
 # The 'all' target must be .PHONY because the 'divide_test' target is
 # also .PHONY.  If 'all' were not .PHONY, then make will not consider
@@ -31,14 +35,23 @@ DIVIDE_TEST := $(BUILD_DIR)/divide_test
 # 'divide_test' cannot be a .PHONY target because it is a prerequisite
 # of 'all'.
 .PHONY: all
-all: divide_test
+all: divide_test divide2_test
+
+.PHONY: run1 run2
+run1: divide_test
+	$(DIVIDE_TEST)
+
+run2: divide2_test
+	$(DIVIDE2_TEST)
 
 .PHONY: run
-run:  divide_test
-	$(DIVIDE_TEST)
+run:  run1 run2
 
 .PHONY: divide_test
 divide_test: $(DIVIDE_TEST)
+
+.PHONY: divide2_test
+divide2_test: $(DIVIDE2_TEST)
 
 $(DIVIDE_TEST): $(DIVIDE_TEST_OBJS)
 	$(CC) $(LDFLAGS) $(DIVIDE_TEST_OBJS) -o $@
@@ -48,6 +61,11 @@ $(DIVIDE_TEST): $(DIVIDE_TEST_OBJS)
 # and that the tiemstamp of BUILD_DIR is not considered when
 # it is a prerequisite of other files.
 $(DIVIDE_TEST_OBJS): | $(BUILD_DIR)
+
+$(DIVIDE2_TEST): $(DIVIDE2_TEST_OBJS)
+	$(CC) $(LDFLAGS) $(DIVIDE2_TEST_OBJS) -o $@
+
+$(DIVIDE2_TEST_OBJS): | $(BUILD_DIR)
 
 $(BUILD_DIR)/%.o: %.c
 	$(CC) -c $(CFLAGS) $< -o $@
