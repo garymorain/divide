@@ -27,5 +27,7 @@ int main(int argc, char **argv) {
     }
     test_divide(9999, 9999, 1, 0);
     test_divide(9999, 0, 0xffffffff, 9999);
+    test_divide(0x80000000, 0x10000000, 8, 0);
+    test_divide(0xffffffff, 0x10000000, 0xf, 0x0fffffff);
     return (int)test_fail;
 }

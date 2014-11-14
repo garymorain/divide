@@ -7,7 +7,7 @@ void divide(uint32_t dividend, uint32_t divisor,
     uint32_t r = 0;
 
     for (int i = 0; i < 32; i++) {
-        r = (r << 1) | ((dividend & msb) >> 31);
+        r = (r << 1) | (dividend >> 31);
         dividend <<= 1;
         q <<= 1;
         uint32_t diff = r - divisor;
