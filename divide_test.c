@@ -7,10 +7,12 @@
 
 int main(int argc, char **argv) {
   bool test_fail = false;
-  for (uint32_t dividend = 1024; dividend < 0xfff00000; dividend = dividend + 1024) {
-    for (uint32_t divisor = 1; divisor < 1025; divisor = divisor * 2) {
-      uint32_t expected_quotient = dividend / divisor;
-      uint32_t expected_remainder = dividend % divisor;
+  for (uint32_t m1 = 1; m1 < (1 << 12); m1++) {
+    for (uint32_t m2 = 1; m2 < (1 << 12); m2++) {
+      uint32_t dividend = m1 * m2;
+      uint32_t divisor = m2;
+      uint32_t expected_quotient = m1;
+      uint32_t expected_remainder = 0;
       uint32_t quotient = 0;
       uint32_t remainder = 0;
       divide(dividend, divisor, &quotient, &remainder);
@@ -22,5 +24,5 @@ int main(int argc, char **argv) {
       }
     }
   }
-    return (int)test_fail;
+  return (int)test_fail;
 }
